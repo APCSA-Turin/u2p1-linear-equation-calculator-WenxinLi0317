@@ -25,7 +25,8 @@ public class LinearCalculator{
         int comma2= point2.indexOf(",");
         int paren3 = point2.indexOf("(");
         int paren4 = point2.indexOf(")");
-    
+    //and exlude the parenthesis and comma, takes only the interger out from the substring
+    //and parse that substring into int
         this.x1 = Integer.parseInt(point1.substring(paren1 + 1, comma).trim());
         this.y1 = Integer.parseInt(point1.substring(comma + 1, paren2).trim());
         this.x2 = Integer.parseInt(point2.substring(paren3 + 1, comma2).trim());
@@ -50,9 +51,13 @@ public class LinearCalculator{
     //distance() -> returns a double. 
     //calculates the distance between the two points to the nearest HUNDREDTH and returns the value.
     public double distance(){
+        //we first calculate the horizontal and vertical distance bewtween x1,x2 & y1,y2
         double horizontal = (double) (x2 - x1);
         double vertical = (double) (y2 - y1);
+        //then we add the square of each value, then square root it to gte distance
         double distance = Math.sqrt(horizontal * horizontal + vertical * vertical);
+        //by using math round, we can round it to 2 decimal places
+        //by fist multiply it by 100.00, then divide by 100.00
         return Math.round(distance * 100.0) / 100.0;
     }
 
@@ -60,10 +65,14 @@ public class LinearCalculator{
    
     //if y-int if undefined, should return -999.99
     public double yInt(){
+        //if the slope is undefined, then the y-intercept is undefined, too
+
         double slope = slope();
         if (slope == -999.99) {
             return -999.99; // Undefined y-intercept
         }
+        //but if we had a valid slope, we can calculate the y-int
+        //by first take the value of y-coor, subtract it by the product of the x-coor*slope
         double yInt = y1 - (slope * x1);
         return Math.round(yInt * 100.0) / 100.0;
     }
@@ -73,11 +82,15 @@ public class LinearCalculator{
     //if slope is undefined, should return -999.99
     public double slope() {
         int horizontal = x2 - x1;
+        //if the denominator is 0, then the slope is undefined
         if (horizontal == 0) {
             return -999.99; // Undefined slope
         }
+        //we can find slope by divide the change in y-value over change in x-value
         double vertical = y2 - y1;
         double slope = vertical / horizontal;
+          //by using math round, we can round it to 2 decimal places
+        //by fist multiply it by 100.00, then divide by 100.00
         return Math.round(slope * 100.0) / 100.0;
     }
 
@@ -88,15 +101,21 @@ public class LinearCalculator{
     public String equation(){
         double slope = slope();
         double b = yInt();
+        //if slope is undefined, then the whole equation is undefined
         if(slope==-999.99){
             return "undefined";
         }else if (slope==0){
+            //if slope is 0, then nomatter what x-value you have, y is always equal to the y int
             return "y="+b;
         }else if(b==-999.99 || b==0){
+            //but if there is no y-int, instead of y=mx+0.0,
+            //we want it to report just simply y=mx
             return "y="+slope+"x";
         }else if (b < 0){
+            //if y-int is a negative vaule, we want to delte that extra "+" sign
             return "y="+slope+"x"+b;
         }else{
+            //if y-int is a positive vaule, we want to keep that extra "+" sign
             return "y="+slope+"x+"+b;
         }
     }
